@@ -1,4 +1,44 @@
 <?php
+echo ("Page Web OK");
+// Connexion à la base MariaDB
+$mysqli = new mysqli('localhost','root','zal3-zdailich0_2');
+if ($mysqli->connect_errno) {
+ //...
+ }
+//Préparation du mot de passe de l’utilisateur tuxie
+$userspassword = "CeciEstMonMotdePasse!123";
+
+// On rajoute du sel...
+// pour empêcher les attaques par "Rainbow Tables" cf
+// http://en.wikipedia.org/wiki/Rainbow_table
+
+$salt = "OnRajouteDuSelPourAllongerleMDP123!!45678__Test";
+
+// Le mot de passe rallongé sera donc :
+// OnRajouteDuSelPourAllongerleMDP123!!45678__TestCeciEstMonMotdePasse!123
+$password = hash('sha256', $salt.$userspassword);
+
+echo $password;
+// Constitution par concaténation d'une requête UPDATE + exécution
+$requete = "UPDATE PROFIL SET pfl_motdepasse='".$password."' WHERE
+pfl_pseudo='tuxie';";
+echo($requete);
+$resultat=$mysqli->query($requete);
+/*Modification du mot de passe du profil de login tuxie*/
+if (!$resultat)
+{
+ // La requête a echoué ...
+}
+
+else
+{
+ // La requête a réussi...
+}
+//Fermeture de la communication avec la base MariaDB
+$mysqli->close();
+?>
+
+<?php
  echo("Test du serveur PHP");
  phpinfo();
 ?>
